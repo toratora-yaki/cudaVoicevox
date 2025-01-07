@@ -1,7 +1,6 @@
-FROM node:alpine
+FROM node:21
 
-# 必要なビルドツールとPythonをインストール
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     python3 \
     make \
     g++ \
@@ -9,16 +8,15 @@ RUN apk add --no-cache \
     libtool \
     autoconf \
     automake \
-    opus \
-    opus-dev \
+    libopus-dev \
     && ln -sf python3 /usr/bin/python
 
 WORKDIR /usr/app
 COPY ./ /usr/app
 
 # 依存関係のインストール
-RUN apk update && \
-    apk add --no-cache ffmpeg && \
+RUN apt-get update && \
+    apt-get install -y ffmpeg && \
     npm install
 
 CMD [ "npm","start" ]
